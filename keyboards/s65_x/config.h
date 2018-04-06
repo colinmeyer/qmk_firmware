@@ -4,12 +4,12 @@
 #include "config_common.h"
 
 /* USB Device descriptor parameter */
-#define PRODUCT         S65-X-RGB
-#define DESCRIPTION     q.m.k. keyboard firmware for S60-X RGB
+#define PRODUCT         CMER-S65-X-RGB
+#define DESCRIPTION     q.m.k. keyboard firmware for S65-X RGB
 #define VENDOR_ID       0xFEED
 #define PRODUCT_ID      0x6060
 #define DEVICE_VER      0x0001
-#define MANUFACTURER    Sentraq
+#define MANUFACTURER    CmerSentraq
 
 /* key matrix size */
 #define MATRIX_ROWS 5
@@ -22,14 +22,15 @@
 
 /* number of backlight levels */
 #define BACKLIGHT_PIN B7
-#define BACKLIGHT_LEVELS 3
+#define BACKLIGHT_LEVELS 7
+#define BACKLIGHT_BREATHING
 
 #define RGB_DI_PIN D3
 #define RGBLIGHT_ANIMATIONS
 #define RGBLED_NUM 20
-#define RGBLIGHT_HUE_STEP 8
-#define RGBLIGHT_SAT_STEP 8
-#define RGBLIGHT_VAL_STEP 8
+#define RGBLIGHT_HUE_STEP 32
+#define RGBLIGHT_SAT_STEP 16
+#define RGBLIGHT_VAL_STEP 16
 #define RGBLIGHT_EFFECT_KNIGHT_OFFSET 20
 
 /* COL2ROW or ROW2COL */
