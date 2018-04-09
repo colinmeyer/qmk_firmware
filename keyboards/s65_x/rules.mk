@@ -66,4 +66,4 @@ NKRO_ENABLE = yes          # USB Nkey Rollover - if this doesn't work, see here:
 BACKLIGHT_ENABLE = yes     # Enable keyboard backlight functionality
 RGBLIGHT_ENABLE = yes      # Enable RGB light
 
-CONSOLE_ENABLE = yes
+CONSOLE_ENABLE = no
