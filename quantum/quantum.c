@@ -961,8 +961,8 @@ void backlight_set(uint8_t level) {
 
   if (level == 0) {
     // Turn off PWM control on backlight pin
-    dprintf("turning backlight PWM off\n");
-    TCCR1A &= ~(_BV(COM1x1));
+//     dprintf("turning backlight PWM off\n");
+//     TCCR1A &= ~(_BV(COM1x1));
   } else {
     // Turn on PWM control of backlight pin
     dprintf("turning backlight PWM on\n");
