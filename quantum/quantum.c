@@ -948,20 +948,24 @@ static uint16_t cie_lightness(uint16_t v) {
 
 // range for val is [0..TIMER_TOP]. PWM pin is high while the timer count is below val.
 static inline void set_pwm(uint16_t val) {
+  dprintf("set_pwm(%d)\n", val);
   OCR1x = val;
 }
 
 #ifndef BACKLIGHT_CUSTOM_DRIVER
 __attribute__ ((weak))
 void backlight_set(uint8_t level) {
+  dprintf("backlight_set(%d)\n", level);
   if (level > BACKLIGHT_LEVELS)
     level = BACKLIGHT_LEVELS;
 
   if (level == 0) {
     // Turn off PWM control on backlight pin
-    TCCR1A &= ~(_BV(COM1x1));
+//     dprintf("turning backlight PWM off\n");
+//     TCCR1A &= ~(_BV(COM1x1));
   } else {
     // Turn on PWM control of backlight pin
+    dprintf("turning backlight PWM on\n");
     TCCR1A |= _BV(COM1x1);
   }
   // Set the brightness
