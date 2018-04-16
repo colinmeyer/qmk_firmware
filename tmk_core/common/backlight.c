@@ -18,13 +18,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "backlight.h"
 #include "eeconfig.h"
 #include "debug.h"
+#include "backlight_state.h"
 
-backlight_config_t backlight_config;
 
 /** \brief Backlight initialization
  *
  * FIXME: needs doc
  */
+backlight_config_t backlight_config;
 void backlight_init(void)
 {
     /* check signature */

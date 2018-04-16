@@ -25,7 +25,8 @@ typedef union {
     uint8_t raw;
     struct {
         bool    enable :1;
-        uint8_t level  :7;
+        bool    breath :1;
+        uint8_t level  :6; // now only supporting up to 64 levels of backlight brightness o noes
     };
 } backlight_config_t;
 

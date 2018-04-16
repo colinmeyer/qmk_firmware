@@ -15,6 +15,9 @@
  */
 
 #include "quantum.h"
+#include "eeconfig.h"
+#include "../tmk_core/common/backlight_state.h"
+
 #ifdef PROTOCOL_LUFA
 #include "outputselect.h"
 #endif
@@ -1120,7 +1123,13 @@ void backlight_init_ports(void)
 
   backlight_init();
   #ifdef BACKLIGHT_BREATHING
-    breathing_enable();
+    if (!eeconfig_is_enabled()) {
+        eeconfig_init();
+    }
+    backlight_config.raw = eeconfig_read_backlight();
+    if (backlight_config.breath) {
+       breathing_enable();
+    }
   #endif
 }
 
