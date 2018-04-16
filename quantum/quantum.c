@@ -998,6 +998,9 @@ bool is_breathing(void) {
 
 void breathing_enable(void)
 {
+  backlight_config.breath = true;
+  eeconfig_update_backlight(backlight_config.raw);
+
   breathing_counter = 0;
   breathing_halt = BREATHING_NO_HALT;
   breathing_interrupt_enable();
@@ -1015,6 +1018,9 @@ void breathing_pulse(void)
 
 void breathing_disable(void)
 {
+    backlight_config.breath = false;
+    eeconfig_update_backlight(backlight_config.raw);
+
     breathing_interrupt_disable();
     // Restore backlight level
     backlight_set(get_backlight_level());
