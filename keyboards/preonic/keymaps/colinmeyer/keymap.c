@@ -61,7 +61,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Lower
  *    0      1      2      3      4      5      6      7      8      9      10      11
  * ,-----------------------------------------------------------------------------------.
- * |      |      |      |      |      |      |      |      |      |   (  |   )  | Bksp |
+ * | Mute |      |      |      |      |      |      |      |      |   (  |   )  | Bksp |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * |      |      |      |      |   =  |   +  |   -  |   *  |   /  |   [  |   ]  | Del  |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
@@ -74,7 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_LOWER] = LAYOUT_preonic_grid(
 //    0       1        2        3        4        5        6        7        8        9        10      11
-  _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_LPRN, KC_RPRN, KC_BSPC,
+  KC_MUTE, _______, _______, _______, _______, _______, _______, _______, _______, KC_LPRN, KC_RPRN, KC_BSPC,
   _______, _______, _______, _______, KC_EQL,  KC_PLUS, KC_MINS, KC_ASTR, KC_SLSH, KC_LBRC, KC_RBRC, KC_DEL,
   KC_LCTL, _______, _______, _______, TG(_MOUSE), _______, _______, KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE,
   _______, _______, _______, _______, _______, _______, _______, _______,S(KC_NUBS),KC_HOME, KC_END, _______,
@@ -234,6 +234,8 @@ uint16_t muse_counter = 0;
 uint8_t muse_offset = 70;
 uint16_t muse_tempo = 50;
 
+#define MEDIA_KEY_DELAY 7
+
 void encoder_update_user(uint8_t index, bool clockwise) {
   if (muse_mode) {
     if (IS_LAYER_ON(_RAISE)) {
@@ -249,13 +251,36 @@ void encoder_update_user(uint8_t index, bool clockwise) {
         muse_tempo-=1;
       }
     }
-  } else {
+  }
+  else if (IS_LAYER_ON(_LOWER)) {
     if (clockwise) {
-      register_code(KC_PGDN);
-      unregister_code(KC_PGDN);
+      register_code(KC_VOLU);
+      uint16_t held_keycode_timer = timer_read();
+      while (timer_elapsed(held_keycode_timer) < MEDIA_KEY_DELAY) {
+        // no-op
+      }
+      unregister_code(KC_VOLU);
     } else {
-      register_code(KC_PGUP);
-      unregister_code(KC_PGUP);
+      register_code(KC_VOLD);
+      uint16_t held_keycode_timer = timer_read();
+      while (timer_elapsed(held_keycode_timer) < MEDIA_KEY_DELAY) {
+        // no-op
+      }
+      unregister_code(KC_VOLD);
+    }
+  }
+  else if (IS_LAYER_ON(_RAISE)) {
+    if (clockwise) {
+      tap_code(KC_UP);
+    } else {
+      tap_code(KC_DOWN);
+    }
+  }
+  else {
+    if (clockwise) {
+      tap_code(KC_WH_U);
+    } else {
+      tap_code(KC_WH_D);
     }
   }
 }
