@@ -252,6 +252,13 @@ void encoder_update_user(uint8_t index, bool clockwise) {
       }
     }
   }
+  else if (keyboard_report->mods & MODS_SHIFT_MASK) {
+    if (clockwise) {
+      tap_code(LCTL(KC_PPLS));
+    } else {
+      tap_code(LCTL(KC_PMNS));
+    }
+  }
   else if (IS_LAYER_ON(_LOWER)) {
     if (clockwise) {
       register_code(KC_VOLU);
