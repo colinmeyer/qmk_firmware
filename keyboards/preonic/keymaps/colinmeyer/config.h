@@ -37,3 +37,5 @@
 // ec11 clone is backwards
 #define ENCODER_DIRECTION_FLIP
 
+// for media keys (volume) to work from the rotor
+#define TAP_CODE_DELAY 10

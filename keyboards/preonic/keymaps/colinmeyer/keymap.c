@@ -234,8 +234,6 @@ uint16_t muse_counter = 0;
 uint8_t muse_offset = 70;
 uint16_t muse_tempo = 50;
 
-#define MEDIA_KEY_DELAY 7
-
 void encoder_update_user(uint8_t index, bool clockwise) {
   if (muse_mode) {
     if (IS_LAYER_ON(_RAISE)) {
@@ -252,31 +250,26 @@ void encoder_update_user(uint8_t index, bool clockwise) {
       }
     }
   }
-  else if (keyboard_report->mods & MODS_SHIFT_MASK) {
+  else if (keyboard_report->mods & MOD_BIT(KC_RSHIFT)) {
+  // magnification
+    unregister_code(KC_RSHIFT);
     if (clockwise) {
-      tap_code(LCTL(KC_PPLS));
+      tap_code16(C(S(KC_EQL)));
     } else {
-      tap_code(LCTL(KC_PMNS));
+      tap_code16(C(KC_MINS));
     }
+    register_code(KC_RSHIFT);
   }
   else if (IS_LAYER_ON(_LOWER)) {
+  // audio volume
     if (clockwise) {
-      register_code(KC_VOLU);
-      uint16_t held_keycode_timer = timer_read();
-      while (timer_elapsed(held_keycode_timer) < MEDIA_KEY_DELAY) {
-        // no-op
-      }
-      unregister_code(KC_VOLU);
+      tap_code(KC_VOLU);
     } else {
-      register_code(KC_VOLD);
-      uint16_t held_keycode_timer = timer_read();
-      while (timer_elapsed(held_keycode_timer) < MEDIA_KEY_DELAY) {
-        // no-op
-      }
-      unregister_code(KC_VOLD);
+      tap_code(KC_VOLD);
     }
   }
   else if (IS_LAYER_ON(_RAISE)) {
+  // cursor up/down
     if (clockwise) {
       tap_code(KC_UP);
     } else {
@@ -284,6 +277,7 @@ void encoder_update_user(uint8_t index, bool clockwise) {
     }
   }
   else {
+  // mousewheel
     if (clockwise) {
       tap_code(KC_WH_U);
     } else {
