@@ -250,6 +250,27 @@ void encoder_update_user(uint8_t index, bool clockwise) {
       }
     }
   }
+  else if (keyboard_report->mods
+      & (MOD_BIT(KC_LALT) | MOD_BIT(KC_LGUI) | MOD_BIT(KC_LCTL)) ) {
+  // app/tab switcher
+    if (clockwise) {
+      tap_code(KC_TAB);
+    } else {
+      tap_code16(S(KC_TAB));
+    }
+  }
+  else if (keyboard_report->mods & MOD_BIT(KC_LSFT)) {
+  // window switcher
+    unregister_code(KC_LSFT);
+    register_code(KC_LGUI);
+    if (clockwise) {
+      tap_code(KC_GRAVE);
+    } else {
+      tap_code16(S(KC_GRAVE));
+    }
+    unregister_code(KC_LGUI);
+    register_code(KC_LSFT);
+  }
   else if (keyboard_report->mods & MOD_BIT(KC_RSHIFT)) {
   // magnification
     unregister_code(KC_RSHIFT);
