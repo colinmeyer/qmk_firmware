@@ -235,22 +235,7 @@ uint8_t muse_offset = 70;
 uint16_t muse_tempo = 50;
 
 void encoder_update_user(uint8_t index, bool clockwise) {
-  if (muse_mode) {
-    if (IS_LAYER_ON(_RAISE)) {
-      if (clockwise) {
-        muse_offset++;
-      } else {
-        muse_offset--;
-      }
-    } else {
-      if (clockwise) {
-        muse_tempo+=1;
-      } else {
-        muse_tempo-=1;
-      }
-    }
-  }
-  else if (keyboard_report->mods
+  if (keyboard_report->mods
       & (MOD_BIT(KC_LALT) | MOD_BIT(KC_LGUI) | MOD_BIT(KC_LCTL)) ) {
   // app/tab switcher
     if (clockwise) {
@@ -259,27 +244,22 @@ void encoder_update_user(uint8_t index, bool clockwise) {
       tap_code16(S(KC_TAB));
     }
   }
-  else if (keyboard_report->mods & MOD_BIT(KC_LSFT)) {
+  else if (IS_LAYER_ON(_ADJUST)) {
   // window switcher
-    unregister_code(KC_LSFT);
-    register_code(KC_LGUI);
+  // sends gui ` / gui shift `
     if (clockwise) {
-      tap_code(KC_GRAVE);
+      tap_code16(G(KC_GRAVE));
     } else {
-      tap_code16(S(KC_GRAVE));
+      tap_code16(G(S(KC_GRAVE)));
     }
-    unregister_code(KC_LGUI);
-    register_code(KC_LSFT);
   }
-  else if (keyboard_report->mods & MOD_BIT(KC_RSHIFT)) {
+  else if (IS_LAYER_ON(_RAISE)) {
   // magnification
-    unregister_code(KC_RSHIFT);
     if (clockwise) {
       tap_code16(C(S(KC_EQL)));
     } else {
       tap_code16(C(KC_MINS));
     }
-    register_code(KC_RSHIFT);
   }
   else if (IS_LAYER_ON(_LOWER)) {
   // audio volume
@@ -289,13 +269,25 @@ void encoder_update_user(uint8_t index, bool clockwise) {
       tap_code(KC_VOLD);
     }
   }
-  else if (IS_LAYER_ON(_RAISE)) {
+  else if (keyboard_report->mods & MOD_BIT(KC_LSHIFT)) {
   // cursor up/down
+    unregister_code(KC_LSHIFT);
+    if (clockwise) {
+      tap_code(KC_RIGHT);
+    } else {
+      tap_code(KC_LEFT);
+    }
+    register_code(KC_LSHIFT);
+  }
+  else if (keyboard_report->mods & MOD_BIT(KC_RSHIFT)) {
+  // cursor up/down
+    unregister_code(KC_RSHIFT);
     if (clockwise) {
       tap_code(KC_UP);
     } else {
       tap_code(KC_DOWN);
     }
+    register_code(KC_RSHIFT);
   }
   else {
   // mousewheel
