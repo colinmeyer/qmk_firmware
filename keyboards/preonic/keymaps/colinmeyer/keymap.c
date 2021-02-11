@@ -16,6 +16,7 @@
 
 #include QMK_KEYBOARD_H
 #include "muse.h"
+#include "print.h"
 
 enum preonic_layers {
   _QWERTY,
@@ -233,9 +234,18 @@ uint16_t muse_counter = 0;
 uint8_t muse_offset = 70;
 uint16_t muse_tempo = 50;
 
+void keyboard_post_init_user(void) {
+  // Customise these values to desired behaviour
+  debug_enable=true;
+  //debug_matrix=true;
+  //debug_keyboard=true;
+  //debug_mouse=true;
+}
+
 void encoder_update_user(uint8_t index, bool clockwise) {
   if (keyboard_report->mods
       & (MOD_BIT(KC_LALT) | MOD_BIT(KC_LGUI) | MOD_BIT(KC_LCTL)) ) {
+    dprint("c/o/a rotor\n");
   // app/tab switcher
     if (clockwise) {
       tap_code(KC_TAB);
@@ -244,6 +254,7 @@ void encoder_update_user(uint8_t index, bool clockwise) {
     }
   }
   else if (IS_LAYER_ON(_ADJUST)) {
+    dprint("adjust layer rotor\n");
   // window switcher
   // sends gui ` / gui shift `
     if (clockwise) {
@@ -253,6 +264,7 @@ void encoder_update_user(uint8_t index, bool clockwise) {
     }
   }
   else if (IS_LAYER_ON(_RAISE)) {
+    dprint("raise layer rotor\n");
   // magnification
     if (clockwise) {
       tap_code16(C(S(KC_EQL)));
@@ -261,6 +273,7 @@ void encoder_update_user(uint8_t index, bool clockwise) {
     }
   }
   else if (IS_LAYER_ON(_LOWER)) {
+    dprint("lower layer rotor\n");
   // audio volume
     if (clockwise) {
       tap_code(KC_VOLU);
@@ -269,6 +282,7 @@ void encoder_update_user(uint8_t index, bool clockwise) {
     }
   }
   else if (keyboard_report->mods & MOD_BIT(KC_LSHIFT)) {
+    dprint("lshift layer rotor\n");
   // cursor up/down
     unregister_code(KC_LSHIFT);
     if (clockwise) {
@@ -279,6 +293,7 @@ void encoder_update_user(uint8_t index, bool clockwise) {
     register_code(KC_LSHIFT);
   }
   else if (keyboard_report->mods & MOD_BIT(KC_RSHIFT)) {
+    dprint("rshift layer rotor\n");
   // cursor up/down
     unregister_code(KC_RSHIFT);
     if (clockwise) {
@@ -289,6 +304,7 @@ void encoder_update_user(uint8_t index, bool clockwise) {
     register_code(KC_RSHIFT);
   }
   else {
+    dprint("unmod rotor\n");
   // mousewheel
     if (clockwise) {
       tap_code(KC_WH_U);
