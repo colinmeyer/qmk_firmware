@@ -27,7 +27,6 @@ enum preonic_layers {
 
 enum preonic_keycodes {
   QWERTY = SAFE_RANGE,
-  MOUSE,
   LOWER,
   RAISE,
   BACKLIT
@@ -144,9 +143,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_MOUSE] = LAYOUT_preonic_grid(
 //    0       1        2        3        4        5        6        7        8        9        10      11
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,_______, 
-  _______, _______, _______, _______, KC_WH_U, _______, _______, KC_BTN1, KC_BTN3, KC_BTN2, KC_WH_U,_______, 
+  _______, KC_ACL0, KC_ACL1, KC_ACL2, KC_WH_U, _______, _______, KC_BTN1, KC_BTN3, KC_BTN2, KC_WH_U,_______, 
   _______, _______, _______, KC_WH_U, KC_WH_D, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, KC_WH_D,_______, 
-  _______, KC_ACL0, KC_ACL1, KC_ACL2, _______, _______, _______, KC_WH_L, KC_WH_R, _______, _______,_______, 
+  _______, _______, _______, _______, _______, _______, _______, KC_WH_L, KC_WH_R, _______, _______,_______, 
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,_______
 )
 
