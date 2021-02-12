@@ -234,8 +234,8 @@ uint8_t muse_offset = 70;
 uint16_t muse_tempo = 50;
 
 void encoder_update_user(uint8_t index, bool clockwise) {
-  if (keyboard_report->mods
-      & (MOD_BIT(KC_LALT) | MOD_BIT(KC_LGUI) | MOD_BIT(KC_LCTL)) ) {
+  if (get_mods() & (MOD_BIT(KC_LALT) | MOD_BIT(KC_LGUI) | MOD_BIT(KC_LCTL)) ) {
+    dprint("c/o/a rotor\n");
   // app/tab switcher
     if (clockwise) {
       tap_code(KC_TAB);
@@ -268,7 +268,8 @@ void encoder_update_user(uint8_t index, bool clockwise) {
       tap_code(KC_VOLD);
     }
   }
-  else if (keyboard_report->mods & MOD_BIT(KC_LSHIFT)) {
+  else if (get_mods() & MOD_BIT(KC_LSHIFT)) {
+    dprint("lshift layer rotor\n");
   // cursor up/down
     unregister_code(KC_LSHIFT);
     if (clockwise) {
@@ -278,7 +279,8 @@ void encoder_update_user(uint8_t index, bool clockwise) {
     }
     register_code(KC_LSHIFT);
   }
-  else if (keyboard_report->mods & MOD_BIT(KC_RSHIFT)) {
+  else if (get_mods() & MOD_BIT(KC_RSHIFT)) {
+    dprint("rshift layer rotor\n");
   // cursor up/down
     unregister_code(KC_RSHIFT);
     if (clockwise) {
