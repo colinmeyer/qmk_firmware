@@ -43,7 +43,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * |Ctr/Es|   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |  "   |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Sh/Ent|
+ * |Cap/sf|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Sh/Ent|
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |  `   | Ctrl | GUI  | Alt  |Lower |    Space    |Raise | Left | Down |  Up  |Right |
  * `-----------------------------------------------------------------------------------'
@@ -52,7 +52,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_DEL,
   LCTL_T(KC_ESC),  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
-  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, RSFT_T(KC_ENT),
+  MT(KC_LSFT,KC_CAPS), KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, RSFT_T(KC_ENT),
   KC_GRAVE, KC_LCTL, KC_LGUI, KC_LALT, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
 ),
 
@@ -234,16 +234,30 @@ uint8_t muse_offset = 70;
 uint16_t muse_tempo = 50;
 
 void encoder_update_user(uint8_t index, bool clockwise) {
-  if (get_mods() & (MOD_BIT(KC_LALT) | MOD_BIT(KC_LGUI) | MOD_BIT(KC_LCTL)) ) {
-    dprint("c/o/a rotor\n");
+  if (IS_LAYER_ON(_RAISE)) {
+  // magnification
+    if(get_mods() & MOD_BIT(KC_LGUI)) {
+    // osx style if holding gui
+      if (clockwise) {
+        tap_code16(S(KC_EQL));
+      } else {
+        tap_code16(KC_MINS);
+      }
+    } else {
+      if (clockwise) {
+        tap_code16(C(S(KC_EQL)));
+      } else {
+        tap_code16(C(KC_MINS));
+      }
+    }
+  } else if (get_mods() & (MOD_BIT(KC_LALT) | MOD_BIT(KC_LGUI) | MOD_BIT(KC_LCTL)) ) {
   // app/tab switcher
     if (clockwise) {
       tap_code(KC_TAB);
     } else {
       tap_code16(S(KC_TAB));
     }
-  }
-  else if (IS_LAYER_ON(_ADJUST)) {
+  } else if (IS_LAYER_ON(_ADJUST)) {
   // window switcher
   // sends gui ` / gui shift `
     if (clockwise) {
@@ -251,25 +265,14 @@ void encoder_update_user(uint8_t index, bool clockwise) {
     } else {
       tap_code16(G(S(KC_GRAVE)));
     }
-  }
-  else if (IS_LAYER_ON(_RAISE)) {
-  // magnification
-    if (clockwise) {
-      tap_code16(C(S(KC_EQL)));
-    } else {
-      tap_code16(C(KC_MINS));
-    }
-  }
-  else if (IS_LAYER_ON(_LOWER)) {
+  } else if (IS_LAYER_ON(_LOWER)) {
   // audio volume
     if (clockwise) {
       tap_code(KC_VOLU);
     } else {
       tap_code(KC_VOLD);
     }
-  }
-  else if (get_mods() & MOD_BIT(KC_LSHIFT)) {
-    dprint("lshift layer rotor\n");
+  } else if (get_mods() & MOD_BIT(KC_LSHIFT)) {
   // cursor up/down
     unregister_code(KC_LSHIFT);
     if (clockwise) {
@@ -278,9 +281,7 @@ void encoder_update_user(uint8_t index, bool clockwise) {
       tap_code(KC_LEFT);
     }
     register_code(KC_LSHIFT);
-  }
-  else if (get_mods() & MOD_BIT(KC_RSHIFT)) {
-    dprint("rshift layer rotor\n");
+  } else if (get_mods() & MOD_BIT(KC_RSHIFT)) {
   // cursor up/down
     unregister_code(KC_RSHIFT);
     if (clockwise) {
@@ -289,8 +290,7 @@ void encoder_update_user(uint8_t index, bool clockwise) {
       tap_code(KC_DOWN);
     }
     register_code(KC_RSHIFT);
-  }
-  else {
+  } else {
   // mousewheel
     if (clockwise) {
       tap_code(KC_WH_U);
