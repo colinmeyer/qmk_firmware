@@ -39,3 +39,6 @@
 
 // for media keys (volume) to work from the rotor
 #define TAP_CODE_DELAY 10
+
+// tap dance period
+#define TAPPING_TERM 175
