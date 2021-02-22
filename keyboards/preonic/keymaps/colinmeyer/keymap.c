@@ -234,7 +234,15 @@ uint8_t muse_offset = 70;
 uint16_t muse_tempo = 50;
 
 void encoder_update_user(uint8_t index, bool clockwise) {
-  if (IS_LAYER_ON(_RAISE)) {
+  if (IS_LAYER_ON(_ADJUST)) {
+  // window switcher
+  // sends gui ` / gui shift `
+    if (clockwise) {
+      tap_code16(G(KC_GRAVE));
+    } else {
+      tap_code16(G(S(KC_GRAVE)));
+    }
+  } else if (IS_LAYER_ON(_RAISE)) {
   // magnification
     if(get_mods() & MOD_BIT(KC_LGUI)) {
     // osx style if holding gui
@@ -257,15 +265,7 @@ void encoder_update_user(uint8_t index, bool clockwise) {
     } else {
       tap_code16(S(KC_TAB));
     }
-  } else if (IS_LAYER_ON(_ADJUST)) {
-  // window switcher
-  // sends gui ` / gui shift `
-    if (clockwise) {
-      tap_code16(G(KC_GRAVE));
-    } else {
-      tap_code16(G(S(KC_GRAVE)));
-    }
-  } else if (IS_LAYER_ON(_LOWER)) {
+  } else  if (IS_LAYER_ON(_LOWER)) {
   // audio volume
     if (clockwise) {
       tap_code(KC_VOLU);
