@@ -240,6 +240,51 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
+
+/* capslock colors */
+const rgblight_segment_t PROGMEM my_capslock_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {4, 2, HSV_MAGENTA},
+    {0, 2, HSV_MAGENTA},
+    {8, 1, HSV_MAGENTA}
+);
+
+/* numpad colors */
+const rgblight_segment_t PROGMEM my_numpad_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {4, 2, HSV_GREEN},
+    {0, 2, HSV_GREEN},
+    {8, 1, HSV_GREEN}
+);
+
+/* mouse colors */
+const rgblight_segment_t PROGMEM my_mouse_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {4, 2, HSV_CYAN},
+    {0, 2, HSV_CYAN},
+    {8, 1, HSV_CYAN}
+);
+
+// Now define the array of layers. Later layers take precedence
+const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
+    my_capslock_layer,
+    my_numpad_layer,
+    my_mouse_layer
+);
+
+void keyboard_post_init_user(void) {
+    // Enable the LED layers
+    rgblight_layers = my_rgb_layers;
+}
+
+bool led_update_user(led_t led_state) {
+    rgblight_set_layer_state(0, led_state.caps_lock);
+    return true;
+}
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    rgblight_set_layer_state(1, layer_state_cmp(state, _NUMPAD));
+    rgblight_set_layer_state(2, layer_state_cmp(state, _MOUSE));
+    return state;
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
         case QWERTY:

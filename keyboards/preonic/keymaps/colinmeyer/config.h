@@ -42,3 +42,5 @@
 
 // tap dance period
 #define TAPPING_TERM 175
+
+#define RGBLIGHT_LAYERS
