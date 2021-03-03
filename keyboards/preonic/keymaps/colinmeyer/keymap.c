@@ -347,6 +347,7 @@ void os_finished(qk_tap_dance_state_t *state, void *user_data) {
     switch (xtap_state.state) {
         case SINGLE_TAP: register_code16(G(KC_TAB)); break;
         case SINGLE_HOLD: register_code16(KC_LGUI); break;
+        case DOUBLE_TAP: layer_invert(_MOUSE); break;
     }
 }
 
@@ -381,6 +382,7 @@ void ctl_finished(qk_tap_dance_state_t *state, void *user_data) {
     switch (xtap_state.state) {
         case SINGLE_TAP: register_code16(G(KC_GRAVE)); break;
         case SINGLE_HOLD: register_code16(KC_LCTL); break;
+        case DOUBLE_TAP: layer_invert(_NUMPAD); break;
     }
 }
 
