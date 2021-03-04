@@ -28,6 +28,8 @@ UNICODE_ENABLE = no         # Unicode
 BLUETOOTH_ENABLE = no       # Enable Bluetooth
 AUDIO_ENABLE = no           # Audio output
 
+ENCODER_ENABLE = yes        # Rotary goodness
+
 # Save as much space as we can...
 LTO_ENABLE = yes
 GRAVE_ESC_ENABLE = no

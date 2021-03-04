@@ -22,3 +22,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
+void encoder_update_user(uint8_t index, bool clockwise) {
+    if (clockwise) {
+        register_code(KC_P);
+        unregister_code(KC_P);
+    } else {
+        register_code(KC_Q);
+        unregister_code(KC_Q);
+    }
+}
+

@@ -32,20 +32,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /*
  * Keyboard Matrix Assignments
- *
- * On this board we have direct connection: no diodes.
  */
 #define DIRECT_PINS {{ B5 }}
-
-/* Debounce reduces chatter (unintended double-presses) - set 0 if debouncing is not needed */
 #define DEBOUNCE 5
 
-// #define BACKLIGHT_PIN B1
-// #define BACKLIGHT_LEVELS 2
-// #define RGBLIGHT_SLEEP
+/* rotary encoder */
+#define ENCODERS_PAD_A { B2 }
+#define ENCODERS_PAD_B { B0 }
 
-//#define RGBLED_NUM 2
-//#define RGB_DI_PIN B2
+#define LED_CAPS_LOCK_PIN B1
+#define LED_PIN_ON_STATE 1
 
 // Save as much space as we can...
 #define LAYER_STATE_8BIT
@@ -65,5 +61,3 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define USB_INTR_PENDING_BIT PCIF
 #define USB_INTR_VECTOR SIG_PIN_CHANGE
 
-#define COMBO_COUNT 1
-#define COMBO_TERM 500
