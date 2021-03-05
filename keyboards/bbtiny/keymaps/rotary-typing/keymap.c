@@ -41,10 +41,6 @@ enum {
 
 uint8_t cur_dance(qk_tap_dance_state_t *state);
 
-// For the x tap dance. Put it here so it can be used in any keymap
-void os_finished(qk_tap_dance_state_t *state, void *user_data);
-void os_reset(qk_tap_dance_state_t *state, void *user_data);
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT(
     TD(TAPKEY)
@@ -53,13 +49,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 
 enum {
+    NO_TAP = 0,
     SINGLE_TAP = 1,
     SINGLE_HOLD,
     DOUBLE_TAP,
     DOUBLE_HOLD,
     DOUBLE_SINGLE_TAP, // Send two single taps
     TRIPLE_TAP,
-    TRIPLE_HOLD
+    TRIPLE_HOLD,
+    MUMBLETAP
 };
 
 /* tap dance for MT functions w/ mods */
@@ -77,11 +75,11 @@ uint8_t cur_dance(qk_tap_dance_state_t *state) {
     if (state->count == 3) {
         if (state->pressed) return TRIPLE_HOLD;
         else return TRIPLE_TAP;
-    } else return 8; // Magic number. At some point this method will expand to work for more presses
+    } else return MUMBLETAP;
 }
 
 
-uint8_t tap_state = 0;
+uint8_t tap_state = NO_TAP;
 
 void tapkey_finished(qk_tap_dance_state_t *state, void *user_data) {
     tap_state = cur_dance(state);
@@ -105,11 +103,8 @@ void tapkey_finished(qk_tap_dance_state_t *state, void *user_data) {
 
 
 void tapkey_reset(qk_tap_dance_state_t *state, void *user_data) {
-    switch (tap_state) {
-    }
+	tap_state = NO_TAP;
 }
-
-
 
 qk_tap_dance_action_t tap_dance_actions[] = {
     [TAPKEY] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, tapkey_finished, tapkey_reset)
