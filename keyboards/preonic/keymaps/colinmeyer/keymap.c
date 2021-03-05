@@ -33,21 +33,6 @@ enum preonic_keycodes {
 };
 
 
-/* tap dance stuff */
-typedef struct {
-    bool is_press_action;
-    uint8_t state;
-} tap;
-
-enum {
-    SINGLE_TAP = 1,
-    SINGLE_HOLD,
-    DOUBLE_TAP,
-    DOUBLE_HOLD,
-    DOUBLE_SINGLE_TAP, // Send two single taps
-    TRIPLE_TAP,
-    TRIPLE_HOLD
-};
 
 // Tap dance enums
 enum {
@@ -55,18 +40,6 @@ enum {
 	ALT_ALTTAB,
 	CTL_OSTIC
 };
-
-uint8_t cur_dance(qk_tap_dance_state_t *state);
-
-// For the x tap dance. Put it here so it can be used in any keymap
-void os_finished(qk_tap_dance_state_t *state, void *user_data);
-void os_reset(qk_tap_dance_state_t *state, void *user_data);
-void alt_finished(qk_tap_dance_state_t *state, void *user_data);
-void alt_reset(qk_tap_dance_state_t *state, void *user_data);
-void ctl_finished(qk_tap_dance_state_t *state, void *user_data);
-void ctl_reset(qk_tap_dance_state_t *state, void *user_data);
-
-
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -318,6 +291,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 };
 
 
+enum {
+    NO_TAP,
+    SINGLE_TAP,
+    SINGLE_HOLD,
+    DOUBLE_TAP,
+    DOUBLE_HOLD,
+    TRIPLE_TAP,
+    TRIPLE_HOLD,
+    MUMBLE_TAP
+};
+
 /* tap dance for MT functions w/ mods */
 uint8_t cur_dance(qk_tap_dance_state_t *state) {
     if (state->count == 1) {
@@ -333,66 +317,66 @@ uint8_t cur_dance(qk_tap_dance_state_t *state) {
     if (state->count == 3) {
         if (state->pressed) return TRIPLE_HOLD;
         else return TRIPLE_TAP;
-    } else return 8; // Magic number. At some point this method will expand to work for more presses
+    } else return MUMBLE_TAP;
 }
 
-// Create an instance of 'tap' for the 'x' tap dance.
-static tap xtap_state = {
-    .is_press_action = true,
-    .state = 0
-};
+
+uint8_t os_tap_state = NO_TAP;
 
 void os_finished(qk_tap_dance_state_t *state, void *user_data) {
-    xtap_state.state = cur_dance(state);
-    switch (xtap_state.state) {
-        case SINGLE_TAP: register_code16(G(KC_TAB)); break;
+    os_tap_state = cur_dance(state);
+    switch (os_tap_state) {
+        case SINGLE_TAP:  register_code16(G(KC_TAB)); break;
         case SINGLE_HOLD: register_code16(KC_LGUI); break;
-        case DOUBLE_TAP: layer_invert(_MOUSE); break;
+        case DOUBLE_TAP:  layer_invert(_MOUSE); break;
     }
 }
 
 void os_reset(qk_tap_dance_state_t *state, void *user_data) {
-    if (xtap_state.state == SINGLE_TAP) {
-        unregister_code16(G(KC_TAB));
-    } else {
-        unregister_code16(KC_LGUI);
+    switch (os_tap_state) {
+        case SINGLE_TAP:  unregister_code16(G(KC_TAB)); break;
+        case SINGLE_HOLD: unregister_code16(KC_LGUI);
     }
-    xtap_state.state = 0;
+    os_tap_state = NO_TAP;
 }
 
+
+uint8_t alt_tap_state = NO_TAP;
+
 void alt_finished(qk_tap_dance_state_t *state, void *user_data) {
-    xtap_state.state = cur_dance(state);
-    switch (xtap_state.state) {
-        case SINGLE_TAP: register_code16(A(KC_TAB)); break;
+    alt_tap_state = cur_dance(state);
+    switch (alt_tap_state) {
+        case SINGLE_TAP:  register_code16(A(KC_TAB)); break;
         case SINGLE_HOLD: register_code16(KC_LALT); break;
     }
 }
 
 void alt_reset(qk_tap_dance_state_t *state, void *user_data) {
-    if (xtap_state.state == SINGLE_TAP) {
-        unregister_code16(A(KC_TAB));
-    } else {
-        unregister_code16(KC_LALT);
+    switch (alt_tap_state) {
+        case SINGLE_TAP:  unregister_code16(A(KC_TAB)); break;
+        case SINGLE_HOLD: unregister_code16(KC_LALT);
     }
-    xtap_state.state = 0;
+    alt_tap_state = NO_TAP;
 }
 
+
+uint8_t ctl_tap_state = NO_TAP;
+
 void ctl_finished(qk_tap_dance_state_t *state, void *user_data) {
-    xtap_state.state = cur_dance(state);
-    switch (xtap_state.state) {
-        case SINGLE_TAP: register_code16(G(KC_GRAVE)); break;
+    ctl_tap_state = cur_dance(state);
+    switch (ctl_tap_state) {
+        case SINGLE_TAP:  register_code16(G(KC_GRAVE)); break;
         case SINGLE_HOLD: register_code16(KC_LCTL); break;
-        case DOUBLE_TAP: layer_invert(_NUMPAD); break;
+        case DOUBLE_TAP:  layer_invert(_NUMPAD); break;
     }
 }
 
 void ctl_reset(qk_tap_dance_state_t *state, void *user_data) {
-    if (xtap_state.state == SINGLE_TAP) {
-        unregister_code16(G(KC_GRAVE));
-    } else {
-        unregister_code16(KC_LCTL);
+    switch (ctl_tap_state) {
+        case SINGLE_TAP:  unregister_code16(G(KC_GRAVE)); break;
+        case SINGLE_HOLD: unregister_code16(KC_LCTL); break;
     }
-    xtap_state.state = 0;
+    ctl_tap_state = NO_TAP;
 }
 
 qk_tap_dance_action_t tap_dance_actions[] = {
