@@ -18,7 +18,13 @@
 // for media keys (volume) to work from the rotor
 #define TAP_CODE_DELAY 10
 
-// tap dance period
+// MT / tap dance period
 #define TAPPING_TERM 175
+
+// MT options for HR mods
+// https://precondition.github.io/home-row-mods#tap-hold-configuration-settings 
+#define IGNORE_MOD_TAP_INTERRUPT
+#define TAPPING_FORCE_HOLD
+#define PERMISSIVE_HOLD
 
 #define RGBLIGHT_LAYERS

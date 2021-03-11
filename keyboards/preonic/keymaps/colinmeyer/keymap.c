@@ -42,6 +42,19 @@ enum tap_dance_keys {
 #define LSFTCAP LSFT_T(KC_CAPS)
 #define RSFTENT RSFT_T(KC_ENT)
 
+
+# qwerty home row mods
+#define GUI_A   LGUI_T(KC_A)
+#define ALT_S   LALT_T(KC_S)
+#define SFT_D   LSFT_T(KC_D)
+#define CTL_F   LCTL_T(KC_F)
+
+#define CTL_J   RCTL_T(KC_J)
+#define SFT_K   RSFT_T(KC_K)
+#define ALT_L   RALT_T(KC_L)
+#define GUISCLN RGUI_T(KC_SCLN)
+
+
 #define TAP_CTL TD(CTL_OSTIC)
 #define TAP_GUI TD(OS_OSTAB)
 #define TAP_ALT TD(ALT_ALTTAB)
@@ -55,7 +68,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Tab  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Del  |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |Ctr/Es|   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |  "   |
+ * |Ctr/Es|GUI/A |ALT/S |SFT/D |CTL/F |   G  |   H  |CTL/J |SFT/K |ALT/L |GUI/; |  "   |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |Cap/sf|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Sh/Ent|
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -65,7 +78,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT_preonic_grid(
   KC_F14,   KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
   KC_TAB,   KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_DEL,
-  CTL_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
+  CTL_ESC,  GUI_A,   ALT_S,   SFT_D,   CTL_F,   KC_G,    KC_H,    CTL_J,   SFT_K,   ALT_L,   GUISCLN, KC_QUOT,
   LSFTCAP,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, RSFTENT,
   KC_GRAVE, TAP_CTL, TAP_GUI, TAP_ALT, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
 ),
