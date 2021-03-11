@@ -140,6 +140,7 @@ void rubout_finished(qk_tap_dance_state_t *state, void *user_data) {
             break;
         case SINGLE_HOLD:
             layer_on(CURSOR);
+            tap_code16(KC_LCBR);
             break;
         case DOUBLE_TAP:
             tap_code16(KC_HASH);
@@ -155,12 +156,13 @@ void rubout_finished(qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void rubout_reset(qk_tap_dance_state_t *state, void *user_data) {
-	rubout_state = NO_TAP;
     switch (rubout_state) {
         case SINGLE_HOLD:
+            tap_code16(KC_RCBR);
             layer_off(CURSOR);
             break;
     }
+	rubout_state = NO_TAP;
 }
 
 
