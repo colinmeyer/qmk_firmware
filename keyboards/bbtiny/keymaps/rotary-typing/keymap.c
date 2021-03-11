@@ -23,12 +23,13 @@ enum bbtiny_layers {
 };
 
 
-
+bool cursormode = false;
 
 uint8_t rotary_keycode = KC_A;
 
 void encoder_update_user(uint8_t index, bool clockwise) {
-    if(IS_LAYER_ON(CURSOR)) {
+//    if(IS_LAYER_ON(CURSOR)) {
+    if(cursormode) {
         if (clockwise) {
             tap_code(KC_RIGHT);
         } else {
@@ -140,6 +141,7 @@ void rubout_finished(qk_tap_dance_state_t *state, void *user_data) {
             break;
         case SINGLE_HOLD:
             layer_on(CURSOR);
+            cursormode = true;
             tap_code16(KC_LCBR);
             break;
         case DOUBLE_TAP:
@@ -159,6 +161,7 @@ void rubout_reset(qk_tap_dance_state_t *state, void *user_data) {
     switch (rubout_state) {
         case SINGLE_HOLD:
             tap_code16(KC_RCBR);
+            cursormode = false;
             layer_off(CURSOR);
             break;
     }
