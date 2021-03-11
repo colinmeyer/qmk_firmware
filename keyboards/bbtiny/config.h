@@ -28,20 +28,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* matrix size */
 #define MATRIX_ROWS 1
-#define MATRIX_COLS 1
+#define MATRIX_COLS 2
 
 /*
  * Keyboard Matrix Assignments
  */
-#define DIRECT_PINS {{ B5 }}
+#define DIRECT_PINS {{ B5, B1 }}
 #define DEBOUNCE 5
 
 /* rotary encoder */
 #define ENCODERS_PAD_A { B2 }
 #define ENCODERS_PAD_B { B0 }
-
-#define LED_CAPS_LOCK_PIN B1
-#define LED_PIN_ON_STATE 1
 
 // Save as much space as we can...
 #define LAYER_STATE_8BIT

@@ -16,19 +16,35 @@
 
 #include QMK_KEYBOARD_H
 
+/* layer names */
+enum bbtiny_layers {
+    DEFAULT,
+    CURSOR
+};
+
+
+
 
 uint8_t rotary_keycode = KC_A;
 
 void encoder_update_user(uint8_t index, bool clockwise) {
-    if (clockwise) {
-        rotary_keycode++;
-        if (rotary_keycode > KC_0) {
-            rotary_keycode = KC_A;
+    if(IS_LAYER_ON(CURSOR)) {
+        if (clockwise) {
+            tap_code(KC_RIGHT);
+        } else {
+            tap_code(KC_LEFT);
         }
     } else {
-        rotary_keycode--;
-        if (rotary_keycode < KC_A) {
-            rotary_keycode = KC_0;
+        if (clockwise) {
+            rotary_keycode++;
+            if (rotary_keycode > KC_0) {
+                rotary_keycode = KC_A;
+            }
+        } else {
+            rotary_keycode--;
+            if (rotary_keycode < KC_A) {
+                rotary_keycode = KC_0;
+            }
         }
     }
 }
@@ -36,14 +52,19 @@ void encoder_update_user(uint8_t index, bool clockwise) {
 
 // Tap dance enums
 enum {
-    TAPKEY
+    TYPE,
+    RUBOUT
 };
 
 uint8_t cur_dance(qk_tap_dance_state_t *state);
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [0] = LAYOUT(
-    TD(TAPKEY)
+  [DEFAULT] = LAYOUT(
+    TD(TYPE), TD(RUBOUT)
+  ),
+
+  [CURSOR] = LAYOUT(
+    _______, _______
   )
 };
 
@@ -54,7 +75,6 @@ enum {
     SINGLE_HOLD,
     DOUBLE_TAP,
     DOUBLE_HOLD,
-    DOUBLE_SINGLE_TAP, // Send two single taps
     TRIPLE_TAP,
     TRIPLE_HOLD,
     MUMBLETAP
@@ -63,7 +83,7 @@ enum {
 /* tap dance for MT functions w/ mods */
 uint8_t cur_dance(qk_tap_dance_state_t *state) {
     if (state->count == 1) {
-        if (state->pressed) return SINGLE_HOLD;
+        if (state->pressed && !state->interrupted) return SINGLE_HOLD;
         else return SINGLE_TAP;
     }
 
@@ -79,11 +99,11 @@ uint8_t cur_dance(qk_tap_dance_state_t *state) {
 }
 
 
-uint8_t tap_state = NO_TAP;
+uint8_t type_state = NO_TAP;
 
-void tapkey_finished(qk_tap_dance_state_t *state, void *user_data) {
-    tap_state = cur_dance(state);
-    switch (tap_state) {
+void type_finished(qk_tap_dance_state_t *state, void *user_data) {
+    type_state = cur_dance(state);
+    switch (type_state) {
         case SINGLE_TAP:
             tap_code(rotary_keycode);
             break;
@@ -91,10 +111,13 @@ void tapkey_finished(qk_tap_dance_state_t *state, void *user_data) {
             tap_code16(S(rotary_keycode));
             break;
         case DOUBLE_TAP:
-            tap_code(KC_BSPACE);
+            tap_code(KC_SPACE);
+            break;
+        case DOUBLE_HOLD:
+            tap_code(KC_TAB);
             break;
         case TRIPLE_TAP:
-            tap_code(KC_SPACE);
+            tap_code(KC_ENTER);
             break;
         case TRIPLE_HOLD:
             tap_code(KC_ENTER);
@@ -102,10 +125,46 @@ void tapkey_finished(qk_tap_dance_state_t *state, void *user_data) {
 }
 
 
-void tapkey_reset(qk_tap_dance_state_t *state, void *user_data) {
-	tap_state = NO_TAP;
+void type_reset(qk_tap_dance_state_t *state, void *user_data) {
+	type_state = NO_TAP;
 }
 
+
+uint8_t rubout_state = NO_TAP;
+
+void rubout_finished(qk_tap_dance_state_t *state, void *user_data) {
+    rubout_state = cur_dance(state);
+    switch (rubout_state) {
+        case SINGLE_TAP:
+            tap_code(KC_BSPACE);
+            break;
+        case SINGLE_HOLD:
+            layer_on(CURSOR);
+            break;
+        case DOUBLE_TAP:
+            tap_code16(KC_HASH);
+            tap_code(KC_B);
+            tap_code(KC_B);
+            tap_code(KC_T);
+            tap_code(KC_I);
+            tap_code(KC_N);
+            tap_code(KC_Y);
+            tap_code(KC_SPACE);
+            break;
+    }
+}
+
+void rubout_reset(qk_tap_dance_state_t *state, void *user_data) {
+	rubout_state = NO_TAP;
+    switch (rubout_state) {
+        case SINGLE_HOLD:
+            layer_off(CURSOR);
+            break;
+    }
+}
+
+
 qk_tap_dance_action_t tap_dance_actions[] = {
-    [TAPKEY] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, tapkey_finished, tapkey_reset)
+    [TYPE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, type_finished, type_reset),
+    [RUBOUT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, rubout_finished, rubout_reset)
 };
