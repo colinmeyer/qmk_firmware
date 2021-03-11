@@ -43,7 +43,7 @@ enum tap_dance_keys {
 #define RSFTENT RSFT_T(KC_ENT)
 
 
-# qwerty home row mods
+// qwerty home row mods
 #define GUI_A   LGUI_T(KC_A)
 #define ALT_S   LALT_T(KC_S)
 #define SFT_D   LSFT_T(KC_D)
@@ -52,7 +52,7 @@ enum tap_dance_keys {
 #define CTL_J   RCTL_T(KC_J)
 #define SFT_K   RSFT_T(KC_K)
 #define ALT_L   RALT_T(KC_L)
-#define GUISCLN RGUI_T(KC_SCLN)
+#define GUISCLN LGUI_T(KC_SCLN)
 
 
 #define TAP_CTL TD(CTL_OSTIC)
