@@ -527,3 +527,13 @@ bool music_mask_user(uint16_t keycode) {
       return true;
   }
 }
+
+bool get_retro_tapping(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LSFTCAP:
+        case RSFTENT: 
+            return false;
+        default:
+            return true;
+    }
+}
