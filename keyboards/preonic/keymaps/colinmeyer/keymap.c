@@ -30,17 +30,20 @@ enum preonic_keycodes {
   QWERTY = SAFE_RANGE,
   LOWER,
   RAISE,
+  BEWOO
 };
 
 enum tap_dance_keys {
     OS_OSTAB,
     ALT_ALTTAB,
-    CTL_OSTIC
+    CTL_OSTIC,
+    SHFT_CAPS,
+    SHFT_ENTR
 };
 
 #define CTL_ESC LCTL_T(KC_ESC)
-#define LSFTCAP LSFT_T(KC_CAPS)
-#define RSFTENT RSFT_T(KC_ENT)
+// #define LSFTCAP LSFT_T(KC_CAPS)
+// #define RSFTENT RSFT_T(KC_ENT)
 
 
 // qwerty home row mods
@@ -55,6 +58,8 @@ enum tap_dance_keys {
 #define GUISCLN LGUI_T(KC_SCLN)
 
 
+#define LSFTCAP TD(SHFT_CAPS)
+#define RSFTENT TD(SHFT_ENTR)
 #define TAP_CTL TD(CTL_OSTIC)
 #define TAP_GUI TD(OS_OSTAB)
 #define TAP_ALT TD(ALT_ALTTAB)
@@ -397,10 +402,57 @@ void ctl_reset(qk_tap_dance_state_t *state, void *user_data) {
     ctl_tap_state = NO_TAP;
 }
 
+
+uint8_t shift_caps_tap_state = NO_TAP;
+
+float bewoo[][2] = SONG(E__NOTE(_B5), Q__NOTE(_B3));
+
+void shift_caps_finished(qk_tap_dance_state_t *state, void *user_data) {
+    shift_caps_tap_state = cur_dance(state);
+    switch (shift_caps_tap_state) {
+        case SINGLE_TAP:  tap_code(KC_CAPS); break;
+        case SINGLE_HOLD:
+            register_code16(KC_LSHIFT);
+            PLAY_SONG(bewoo);
+            break;
+    }
+}
+
+void shift_caps_reset(qk_tap_dance_state_t *state, void *user_data) {
+    switch (shift_caps_tap_state) {
+        case SINGLE_HOLD: unregister_code16(KC_LSHIFT); break;
+    }
+    shift_caps_tap_state = NO_TAP;
+}
+
+
+uint8_t shift_entr_tap_state = NO_TAP;
+
+void shift_entr_finished(qk_tap_dance_state_t *state, void *user_data) {
+    shift_entr_tap_state = cur_dance(state);
+    switch (shift_entr_tap_state) {
+        case SINGLE_TAP:  register_code(KC_ENT); break;
+        case SINGLE_HOLD:
+            register_code16(KC_RSHIFT);
+            PLAY_SONG(bewoo);
+            break;
+    }
+}
+
+void shift_entr_reset(qk_tap_dance_state_t *state, void *user_data) {
+    switch (shift_entr_tap_state) {
+        case SINGLE_TAP:  unregister_code(KC_ENT); break;
+        case SINGLE_HOLD: unregister_code16(KC_RSHIFT); break;
+    }
+    shift_entr_tap_state = NO_TAP;
+}
+
 qk_tap_dance_action_t tap_dance_actions[] = {
     [OS_OSTAB] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, os_finished, os_reset),
     [ALT_ALTTAB] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, alt_finished, alt_reset),
     [CTL_OSTIC] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, ctl_finished, ctl_reset),
+    [SHFT_CAPS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, shift_caps_finished, shift_caps_reset),
+    [SHFT_ENTR] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, shift_entr_finished, shift_entr_reset),
 };
 
 
