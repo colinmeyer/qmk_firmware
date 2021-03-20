@@ -431,17 +431,17 @@ uint8_t shift_entr_tap_state = NO_TAP;
 void shift_entr_finished(qk_tap_dance_state_t *state, void *user_data) {
     shift_entr_tap_state = cur_dance(state);
     switch (shift_entr_tap_state) {
-        case SINGLE_TAP:  register_code(KC_ENT); break;
+        case SINGLE_TAP:  tap_code(KC_ENT); break;
         case SINGLE_HOLD:
             register_code16(KC_RSHIFT);
             PLAY_SONG(bewoo);
             break;
+        case DOUBLE_TAP:  tap_code(KC_ENT); tap_code(KC_ENT); break;
     }
 }
 
 void shift_entr_reset(qk_tap_dance_state_t *state, void *user_data) {
     switch (shift_entr_tap_state) {
-        case SINGLE_TAP:  unregister_code(KC_ENT); break;
         case SINGLE_HOLD: unregister_code16(KC_RSHIFT); break;
     }
     shift_entr_tap_state = NO_TAP;
