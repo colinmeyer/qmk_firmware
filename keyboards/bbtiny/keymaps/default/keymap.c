@@ -16,9 +16,17 @@
 
 #include QMK_KEYBOARD_H
 
+enum BB_LAYERS {
+    DEFAULT,
+    SOHIGH
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [0] = LAYOUT(
-    KC_A
+  [DEFAULT] = LAYOUT(
+    KC_T, MO(SOHIGH)
+  ),
+  [SOHIGH] = LAYOUT(
+    KC_Z, XXXXXXX
   )
 };
 
