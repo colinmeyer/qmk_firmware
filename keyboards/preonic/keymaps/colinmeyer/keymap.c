@@ -92,7 +92,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Lower
  *    0      1      2      3      4      5      6      7      8      9      10      11
  * ,-----------------------------------------------------------------------------------.
- * | Mute |      |      |      |      |      |Pause |      |      |   (  |   )  | Bksp |
+ * | Mute |      |      |      |      |      |Pause |      |      |   (  |   )  |PrntSc|
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * |      |      |      |      |   =  |   +  |   -  |   *  |   /  |   [  |   ]  |  |   |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
@@ -105,7 +105,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_LOWER] = LAYOUT_preonic_grid(
 //    0       1        2        3        4        5        6        7        8        9        10      11
-  KC_MUTE, KC_MPRV, KC_MPLY, KC_MNXT, _______, _______, KC_PAUS, _______, _______, KC_LPRN, KC_RPRN, KC_BSPC,
+  KC_MUTE, KC_MPRV, KC_MPLY, KC_MNXT, _______, _______, KC_PAUS, _______, _______, KC_LPRN, KC_RPRN, KC_PSCR,
   _______, _______, _______, _______, KC_EQL,  KC_PLUS, KC_MINS, KC_ASTR, KC_SLSH, KC_LBRC, KC_RBRC, KC_PIPE,
   _______, _______, _______, KC_PIPE, KC_BSLS, _______, KC_MINS, KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_BSLS,
   _______, _______, _______, _______, _______, _______, _______, _______,S(KC_NUBS),KC_HOME, KC_END, _______,
