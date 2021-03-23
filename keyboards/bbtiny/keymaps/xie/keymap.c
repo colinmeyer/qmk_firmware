@@ -126,6 +126,15 @@ void top_finished(qk_tap_dance_state_t *state, void *user_data) {
             register_code(KC_LGUI);
             rot_mode = ROT_WIN;
             break;
+/*        case TRIPLE_TAP:
+            tap_code(KC_M);
+            tap_code(KC_O);
+            tap_code(KC_R);
+            tap_code(KC_K);
+            tap_code(KC_S);
+            tap_code16(S(KC_1));
+            break; */
+
     }
 }
 
