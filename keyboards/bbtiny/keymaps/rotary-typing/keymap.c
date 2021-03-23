@@ -24,11 +24,10 @@ enum bbtiny_layers {
 
 
 bool cursormode = false;
-
+bool del_cur = false;
 uint8_t rotary_keycode = KC_A;
 
 void encoder_update_user(uint8_t index, bool clockwise) {
-//    if(IS_LAYER_ON(CURSOR)) {
     if(cursormode) {
         if (clockwise) {
             tap_code(KC_RIGHT);
@@ -47,6 +46,13 @@ void encoder_update_user(uint8_t index, bool clockwise) {
                 rotary_keycode = KC_0;
             }
         }
+        if (del_cur) {
+            tap_code(KC_DEL);
+        } else {
+            del_cur = true;
+        }
+        tap_code(rotary_keycode);
+        tap_code(KC_LEFT);
     }
 }
 
@@ -61,18 +67,14 @@ uint8_t cur_dance(qk_tap_dance_state_t *state);
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [DEFAULT] = LAYOUT(
-    TD(TYPE), TD(RUBOUT)
-  ),
-
-  [CURSOR] = LAYOUT(
-    _______, _______
+    TD(RUBOUT), TD(TYPE)
   )
 };
 
 
 enum {
     NO_TAP = 0,
-    SINGLE_TAP = 1,
+    SINGLE_TAP,
     SINGLE_HOLD,
     DOUBLE_TAP,
     DOUBLE_HOLD,
@@ -106,21 +108,41 @@ void type_finished(qk_tap_dance_state_t *state, void *user_data) {
     type_state = cur_dance(state);
     switch (type_state) {
         case SINGLE_TAP:
-            tap_code(rotary_keycode);
+            if (del_cur) {
+                tap_code(KC_RIGHT);
+            } else {
+                tap_code(KC_SPACE);
+            }
+            del_cur = false;
             break;
         case SINGLE_HOLD:
+            if (del_cur) {
+                tap_code(KC_DEL);
+            }
             tap_code16(S(rotary_keycode));
+            del_cur = false;
             break;
         case DOUBLE_TAP:
+            if (del_cur) {
+                tap_code(KC_DEL);
+            }
             tap_code(KC_SPACE);
+            del_cur = false;
             break;
         case DOUBLE_HOLD:
+            if (del_cur) {
+                tap_code(KC_DEL);
+            }
             tap_code(KC_TAB);
             break;
         case TRIPLE_TAP:
+            if (del_cur) {
+                tap_code(KC_DEL);
+            }
             tap_code(KC_ENTER);
             break;
         case TRIPLE_HOLD:
+            tap_code(KC_RIGHT);
             tap_code(KC_ENTER);
     }
 }
@@ -137,12 +159,15 @@ void rubout_finished(qk_tap_dance_state_t *state, void *user_data) {
     rubout_state = cur_dance(state);
     switch (rubout_state) {
         case SINGLE_TAP:
-            tap_code(KC_BSPACE);
+            if (del_cur) { 
+                tap_code(KC_DEL);
+                del_cur = false;
+            } else {
+                tap_code(KC_BSPACE);
+            }
             break;
         case SINGLE_HOLD:
-            layer_on(CURSOR);
             cursormode = true;
-            tap_code16(KC_LCBR);
             break;
         case DOUBLE_TAP:
             tap_code16(KC_HASH);
@@ -153,6 +178,7 @@ void rubout_finished(qk_tap_dance_state_t *state, void *user_data) {
             tap_code(KC_N);
             tap_code(KC_Y);
             tap_code(KC_SPACE);
+            del_cur = false;
             break;
     }
 }
@@ -160,9 +186,7 @@ void rubout_finished(qk_tap_dance_state_t *state, void *user_data) {
 void rubout_reset(qk_tap_dance_state_t *state, void *user_data) {
     switch (rubout_state) {
         case SINGLE_HOLD:
-            tap_code16(KC_RCBR);
             cursormode = false;
-            layer_off(CURSOR);
             break;
     }
 	rubout_state = NO_TAP;
