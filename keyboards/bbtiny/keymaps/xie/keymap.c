@@ -20,7 +20,8 @@ enum rotary_modes {
     ROT_VOLUME = 1,
     ROT_BRIGHT,
     ROT_APP,
-    ROT_TAB
+    ROT_TAB,
+    ROT_WIN
 };
 
 
@@ -40,6 +41,9 @@ void encoder_update_user(uint8_t index, bool clockwise) {
             case ROT_TAB:
                 tap_code(KC_TAB);
                 break;
+            case ROT_WIN:
+                tap_code(KC_GRAVE);
+                break;
         }
     } else {
         switch (rot_mode) {
@@ -52,6 +56,9 @@ void encoder_update_user(uint8_t index, bool clockwise) {
             case ROT_APP:
             case ROT_TAB:
                 tap_code16(S(KC_TAB));
+                break;
+            case ROT_WIN:
+                tap_code16(S(KC_GRAVE));
                 break;
         }
     }
@@ -113,13 +120,11 @@ void top_finished(qk_tap_dance_state_t *state, void *user_data) {
             register_code(KC_MUTE);
             break;
         case SINGLE_HOLD:
-            if (rot_mode == ROT_APP) {
-                unregister_code(KC_LGUI);
-                rot_mode = ROT_TAB;
-                register_code(KC_LCTL);
-            } else {
-                rot_mode = ROT_BRIGHT;
-            }
+            rot_mode = ROT_BRIGHT;
+            break;
+        case DOUBLE_HOLD:
+            register_code(KC_LGUI);
+            rot_mode = ROT_WIN;
             break;
     }
 }
@@ -130,13 +135,11 @@ void top_reset(qk_tap_dance_state_t *state, void *user_data) {
             unregister_code(KC_MUTE);
             break;
         case SINGLE_HOLD:
-            if (rot_mode == ROT_TAB) {
-                unregister_code(KC_LCTL);
-                rot_mode = ROT_APP;
-                register_code(KC_LGUI);
-            } else {
-                rot_mode = ROT_VOLUME;
-            }
+            rot_mode = ROT_VOLUME;
+            break;
+        case DOUBLE_HOLD:
+            unregister_code(KC_LGUI);
+            rot_mode = ROT_VOLUME;
             break;
     }
 	top_state = NO_TAP;
@@ -152,13 +155,12 @@ void bottom_finished(qk_tap_dance_state_t *state, void *user_data) {
             tap_code16(G(KC_TAB));
             break;
         case SINGLE_HOLD:
-            if (rot_mode == ROT_BRIGHT) {
-                rot_mode = ROT_TAB;
-                register_code(KC_LCTL);
-            } else {
-                rot_mode = ROT_APP;
-                register_code(KC_LGUI);
-            }
+            rot_mode = ROT_APP;
+            register_code(KC_LGUI);
+            break;
+        case DOUBLE_HOLD:
+            rot_mode = ROT_TAB;
+            register_code(KC_LCTL);
             break;
     }
 }
@@ -166,14 +168,12 @@ void bottom_finished(qk_tap_dance_state_t *state, void *user_data) {
 void bottom_reset(qk_tap_dance_state_t *state, void *user_data) {
     switch (bottom_state) {
         case SINGLE_HOLD:
-            if (rot_mode == ROT_TAB) {
-                unregister_code(KC_LCTL);
-                rot_mode = ROT_BRIGHT;
-            } else {
-                unregister_code(KC_LGUI);
-                rot_mode = ROT_VOLUME;
-            }
+            unregister_code(KC_LGUI);
+            rot_mode = ROT_VOLUME;
             break;
+        case DOUBLE_HOLD:
+            unregister_code(KC_LCTL);
+            rot_mode = ROT_VOLUME;
     }
 	bottom_state = NO_TAP;
 }
