@@ -20,7 +20,7 @@
 enum preonic_layers {
   _QWERTY,
   _MOUSE,
-  _NUMPAD,
+  _NUMBERS,
   _LOWER,
   _RAISE,
   _ADJUST
@@ -197,13 +197,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 
-[_NUMPAD] = LAYOUT_preonic_grid(
+[_NUMBERS] = LAYOUT_preonic_grid(
 //    0       1        2        3        4        5        6        7        8        9        10      11
-  _______, _______, _______, _______, _______, KC_LCBR, KC_RCBR, _______, KC_SLSH, KC_ASTR, KC_MINS,_______,
-  KC_TAB , _______, KC_UP  , _______, _______, KC_LT  , KC_GT  , KC_7   , KC_8   , KC_9   , KC_PLUS,_______,
-  _______, KC_LEFT, KC_DOWN, KC_RGHT, _______, KC_LPRN, KC_RPRN, KC_4   , KC_5   , KC_6   , KC_PLUS,_______,
-  _______, _______, _______, _______, _______, KC_LBRC, KC_RBRC, KC_1   , KC_2   , KC_3   , KC_ENT ,_______, 
-  _______, _______, _______, _______, _______, _______, _______, _______, KC_0   , KC_DOT , KC_EQL ,_______
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+  KC_0   , KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , KC_6   , KC_7   , KC_8   , KC_9   , KC_PLUS, _______,
+  _______, KC_LEFT, KC_DOWN, KC_RGHT, _______, KC_LPRN, KC_RPRN, KC_4   , KC_5   , KC_6   , KC_PLUS, _______,
+  _______, _______, _______, _______, _______, KC_LBRC, KC_RBRC, KC_1   , KC_2   , KC_3   , KC_ENT , _______, 
+  _______, _______, _______, _______, _______, _______, _______, _______, KC_0   , KC_DOT , KC_EQL , _______
 )
 
 
@@ -276,7 +276,7 @@ bool led_update_user(led_t led_state) {
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-    rgblight_set_layer_state(1, layer_state_cmp(state, _NUMPAD));
+    rgblight_set_layer_state(1, layer_state_cmp(state, _NUMBERS));
     rgblight_set_layer_state(2, layer_state_cmp(state, _MOUSE));
     return state;
 }
@@ -390,7 +390,7 @@ void ctl_finished(qk_tap_dance_state_t *state, void *user_data) {
     switch (ctl_tap_state) {
         case SINGLE_TAP:  register_code16(G(KC_GRAVE)); break;
         case SINGLE_HOLD: register_code16(KC_LCTL); break;
-        case DOUBLE_TAP:  layer_invert(_NUMPAD); break;
+        case DOUBLE_TAP:  layer_invert(_NUMBERS); break;
     }
 }
 
