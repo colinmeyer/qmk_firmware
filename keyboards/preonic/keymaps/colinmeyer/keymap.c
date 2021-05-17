@@ -16,6 +16,8 @@
 
 #include QMK_KEYBOARD_H
 #include "muse.h"
+#include <string.h>
+#include <ctype.h>
 
 enum preonic_layers {
   _QWERTY,
@@ -30,7 +32,8 @@ enum preonic_keycodes {
   QWERTY = SAFE_RANGE,
   LOWER,
   RAISE,
-  BEWOO
+  BEWOO,
+  B_START
 };
 
 enum tap_dance_keys {
@@ -121,16 +124,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * |      |      |      |      |      |      |      |   -  |   =  |   [  |   ]  |  \   |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |      |      |      |      |      |      |ISO # |ISO / | Pg Up| Pg Dn|      |
+ * |      |      |      |      |      |Beyonk|      |ISO # |ISO / | Pg Up| Pg Dn|      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
  * `-----------------------------------------------------------------------------------'
  */
 [_RAISE] = LAYOUT_preonic_grid(
+//    0       1        2        3        4        5        6        7        8        9        10      11
   _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
   _______, DM_PLY1, DM_PLY2, DM_REC1, DM_REC2, DM_RSTP, _______, _______, _______, _______, _______, KC_F12,
   _______, _______, _______, _______, _______, _______, _______, KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS,
-  _______, _______, _______, _______, _______, _______, _______, KC_NUHS, KC_NUBS, KC_PGUP, KC_PGDN, _______,
+  _______, _______, _______, _______, _______, B_START, _______, KC_NUHS, KC_NUBS, KC_PGUP, KC_PGDN, _______,
   _______, _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
 ),
 
@@ -281,8 +285,36 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return state;
 }
 
+
+char beyonkle[18] = "beyonkle";
+
+void gen_beyonkle(bool rCaps) {
+  beyonkle[0] = 'b';
+  uint8_t numEs = rand() % 8 + 2;
+  for (uint8_t i = 1; i <= numEs; i++) {
+    beyonkle[i] = 'e';
+  }
+  strcpy(beyonkle + numEs +1,"yonkle\n");
+  uint8_t i=0;
+  while (beyonkle[i]) {
+    if (rand() % 100 < 30) {
+      beyonkle[i] = toupper(beyonkle[i]);
+    }
+    i++;
+  }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
+        case B_START:
+            if (record->event.pressed) {
+                // when keycode B_START is pressed
+                gen_beyonkle(true);
+                send_string(beyonkle);
+            } else {
+                // when keycode B_START is released
+            }
+            break;
         case QWERTY:
           if (record->event.pressed) {
             set_single_persistent_default_layer(_QWERTY);
@@ -561,4 +593,6 @@ bool music_mask_user(uint16_t keycode) {
       return true;
   }
 }
+
+
 
