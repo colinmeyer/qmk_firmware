@@ -1,5 +1,0 @@
-#include "keyfunc.h"
-
-/* cp keymap.template keymap.c; qmk json2c colinmeyer-kyria.json >>keymap.c */
-
-
