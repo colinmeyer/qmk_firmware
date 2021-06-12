@@ -1,4 +1,5 @@
-#include QMK_KEYBOARD_H
+#pragma once
+
 
 enum cust_keys {
     BEYONK = SAFE_RANGE
