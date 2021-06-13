@@ -99,20 +99,31 @@ void oled_task_user(void) {
 
 #ifdef ENCODER_ENABLE
 bool encoder_update_user(uint8_t index, bool clockwise) {
-    if (index == 0) {
-        // Volume control
+    // app/tab switcher
+    // no layer, alt, ctl, or gui pressed
+    // either encoder
+    if (get_mods() & (MOD_BIT(KC_LALT) | MOD_BIT(KC_LGUI) | MOD_BIT(KC_LCTL) |
+                      MOD_BIT(KC_RALT) | MOD_BIT(KC_RCTL)) ) {
         if (clockwise) {
-            tap_code(KC_VOLU);
+          tap_code(KC_TAB);
         } else {
-            tap_code(KC_VOLD);
+          tap_code16(S(KC_TAB));
+        }
+    }
+    else if (index == 0) {
+        // mouse wheel
+        if (clockwise) {
+            tap_code(KC_WH_U);
+        } else {
+            tap_code(KC_WH_D);
         }
     }
     else if (index == 1) {
         // Page up/Page down
         if (clockwise) {
-            tap_code(KC_PGDN);
+            tap_code(KC_VOLU);
         } else {
-            tap_code(KC_PGUP);
+            tap_code(KC_VOLD);
         }
     }
     return true;
