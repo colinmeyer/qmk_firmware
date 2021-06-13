@@ -14,6 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
+#include <string.h>
+#include <ctype.h>
 
 enum layers {
     QWERTY = 0,
@@ -117,7 +119,36 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 }
 #endif
 
+char beyonkle[18] = "beyonkle";
+
+void gen_beyonkle(bool rCaps) {
+  beyonkle[0] = 'b';
+  uint8_t numEs = rand() % 8 + 2;
+  for (uint8_t i = 1; i <= numEs; i++) {
+    beyonkle[i] = 'e';
+  }
+  strcpy(beyonkle + numEs +1,"yonkle\n");
+  uint8_t i=0;
+  while (beyonkle[i]) {
+    if (rand() % 100 < 30) {
+      beyonkle[i] = toupper(beyonkle[i]);
+    }
+    i++;
+  }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case BEYONK:
+            if (record->event.pressed) {
+                // when keycode B_START is pressed
+                gen_beyonkle(true);
+                send_string(beyonkle);
+            } else {
+                // when keycode B_START is released
+            }
+            break;
+    }
 
     return true;
 }
