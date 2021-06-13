@@ -2,7 +2,9 @@
 
 
 enum cust_keys {
-    BEYONK = SAFE_RANGE
+    BEYONK = SAFE_RANGE,
+    APPSWC,
+    WINSWC
 };
 
 
