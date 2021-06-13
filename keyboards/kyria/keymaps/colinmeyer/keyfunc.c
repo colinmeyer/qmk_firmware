@@ -110,6 +110,22 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
           tap_code16(S(KC_TAB));
         }
     }
+    // magnify - linux style
+    else if (IS_LAYER_ON(PUNCTS)) {
+        if (clockwise) {
+            tap_code16(C(S(KC_EQL)));
+        } else {
+            tap_code16(C(KC_MINS));
+        }
+    }
+    // magnify - osx style
+    else if (IS_LAYER_ON(NUMS)) {
+        if (clockwise) {
+            tap_code16(G(S(KC_EQL)));
+        } else {
+            tap_code16(G(KC_MINS));
+        }
+    }
     else if (index == 0) {
         // mouse wheel
         if (clockwise) {
