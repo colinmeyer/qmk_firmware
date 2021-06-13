@@ -110,6 +110,14 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
           tap_code16(S(KC_TAB));
         }
     }
+    // win switcher
+    else if (IS_LAYER_ON(CURSOR)) {
+        if (clockwise) {
+            tap_code16(G(KC_GRAVE));
+        } else {
+            tap_code16(G(S(KC_GRAVE)));
+        }
+    }
     // magnify - linux style
     else if (IS_LAYER_ON(PUNCTS)) {
         if (clockwise) {
@@ -178,6 +186,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case APPSWC:
             if (record->event.pressed) {
                 tap_code16(G(KC_TAB));
+            }
+            break;
+        case WINSWC:
+            if (record->event.pressed) {
+                tap_code16(G(KC_GRAVE));
             }
             break;
     }
