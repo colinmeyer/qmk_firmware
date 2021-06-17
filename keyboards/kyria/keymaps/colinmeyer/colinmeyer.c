@@ -97,6 +97,9 @@ void oled_task_user(void) {
 }
 #endif
 
+bool app_swinching = false;
+uint16_t app_swinching_time;
+
 #ifdef ENCODER_ENABLE
 bool encoder_update_user(uint8_t index, bool clockwise) {
     // app/tab switcher
@@ -110,12 +113,11 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
           tap_code16(S(KC_TAB));
         }
     }
-    // win switcher
     else if (IS_LAYER_ON(CURSOR)) {
         if (clockwise) {
-            tap_code16(G(KC_GRAVE));
+            tap_code(KC_VOLU);
         } else {
-            tap_code16(G(S(KC_GRAVE)));
+            tap_code(KC_VOLD);
         }
     }
     // magnify - linux style
@@ -143,16 +145,28 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
         }
     }
     else if (index == 1) {
-        // Page up/Page down
+        // app swincher
+        if (! app_swinching) {
+            app_swinching = true;
+            app_swinching_time = timer_read();
+            register_code16(KC_LGUI);
+        }
         if (clockwise) {
-            tap_code(KC_VOLU);
+            tap_code16(KC_TAB);
         } else {
-            tap_code(KC_VOLD);
+            tap_code16(S(KC_TAB));
         }
     }
     return true;
 }
 #endif
+
+void matrix_scan_user(void) {
+    if (app_swinching && timer_elapsed(app_swinching_time) > 4884) {
+        unregister_code16(KC_LGUI);
+        app_swinching = false;
+    }
+}
 
 char beyonkle[18] = "beyonkle";
 
