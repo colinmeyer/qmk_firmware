@@ -22,7 +22,8 @@ enum layers {
     NUMS,
     PUNCTS,
     CURSOR,
-    MOUSE
+    MOUSE,
+    GAME
 };
 
 
@@ -76,6 +77,9 @@ static void render_status(void) {
             break;
         case MOUSE:
             oled_write_P(PSTR("Mouse\n"), false);
+            break;
+        case GAME:
+            oled_write_P(PSTR("Game\n"), false);
             break;
         default:
             oled_write_P(PSTR("Undefined\n"), false);
