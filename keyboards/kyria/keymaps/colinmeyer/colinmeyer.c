@@ -152,7 +152,6 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
         // app swincher
         if (! app_swinching) {
             app_swinching = true;
-            app_swinching_time = timer_read();
             register_code16(KC_LGUI);
         }
         if (clockwise) {
@@ -160,6 +159,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
         } else {
             tap_code16(S(KC_TAB));
         }
+        app_swinching_time = timer_read();
     }
     return true;
 }
