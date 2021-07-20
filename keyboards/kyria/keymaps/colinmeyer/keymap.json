@@ -217,8 +217,8 @@
     [
       "RGB_RMOD",
       "RGB_MOD",
-      "KC_NO",
-      "KC_EJCT",
+      "KC_BTN2",
+      "KC_BTN3",
       "KC_BTN1",
       "KC_NO",
       "KC_NO",

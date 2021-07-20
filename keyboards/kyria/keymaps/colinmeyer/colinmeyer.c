@@ -141,11 +141,19 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
         }
     }
     else if (index == 0) {
-        // mouse wheel
+        // vertical mouse wheel
         if (clockwise) {
             tap_code(KC_WH_U);
         } else {
             tap_code(KC_WH_D);
+        }
+    }
+    else if (IS_LAYER_ON(MOUSE) && index == 1) {
+        // horizontal mouse wheel
+        if (clockwise) {
+            tap_code(KC_WH_R);
+        } else {
+            tap_code(KC_WH_L);
         }
     }
     else if (index == 1) {
