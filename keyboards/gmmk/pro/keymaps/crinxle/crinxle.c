@@ -67,6 +67,12 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
           tap_code16(G(S(KC_GRAVE)));
         }
         register_code16(KC_LALT);
+    } else if (IS_LAYER_ON(1)) {
+        if (clockwise) {
+          tap_code16(KC_BRIGHTNESS_UP);
+        } else {
+          tap_code16(KC_BRIGHTNESS_DOWN);
+        }
     } else {
         if (clockwise) {
           tap_code(KC_VOLU);
