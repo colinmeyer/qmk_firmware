@@ -32,8 +32,11 @@
 #define SPLIT_USB_DETECT
 #define NO_USB_STARTUP_CHECK
 
+// flash to both keyboard halves when changing encoder values
 #define ENCODER_DIRECTION_FLIP
+#define ENCODER_RESOLUTION 2
 
 #define TAPPING_TERM 222
 #define PERMISSIVE_HOLD
 #define IGNORE_MOD_TAP_INTERRUPT
+
