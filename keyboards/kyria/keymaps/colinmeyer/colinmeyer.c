@@ -107,9 +107,9 @@ uint16_t app_swinching_time;
 #ifdef ENCODER_ENABLE
 bool encoder_update_user(uint8_t index, bool clockwise) {
     // app/tab switcher
-    // no layer, alt, ctl, or gui pressed
+    // no layer, alt, ctl pressed
     // either encoder
-    if (get_mods() & (MOD_BIT(KC_LALT) | MOD_BIT(KC_LGUI) | MOD_BIT(KC_LCTL) |
+    if (get_mods() & (MOD_BIT(KC_LALT) | MOD_BIT(KC_LCTL) |
                       MOD_BIT(KC_RALT) | MOD_BIT(KC_RCTL)) ) {
         if (clockwise) {
           tap_code(KC_TAB);
@@ -174,7 +174,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 #endif
 
 void matrix_scan_user(void) {
-    if (app_swinching && timer_elapsed(app_swinching_time) > 4884) {
+    if (app_swinching && timer_elapsed(app_swinching_time) > 989) {
         unregister_code16(KC_LGUI);
         app_swinching = false;
     }
