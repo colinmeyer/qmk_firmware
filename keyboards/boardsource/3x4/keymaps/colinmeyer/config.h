@@ -1,0 +1,3 @@
+#define RGB_DI_PIN D0
+#define RGBLED_NUM 6
+#define RGBLIGHT_ANIMATIONS
