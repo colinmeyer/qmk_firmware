@@ -4,11 +4,12 @@
 
 enum layers {
     QWERTY = 0,
+    GAME,
     NUMS,
     PUNCTS,
     CURSOR,
     MOUSE,
-    GAME
+    ADJUST
 };
 
 
@@ -16,28 +17,31 @@ enum layers {
 static void render_status(void) {
 
     // Host Keyboard Layer Status
-    oled_write_P(PSTR("  _\n_/ \\_\n\n"), false);
+    oled_write_P(PSTR("\n  _\n_/ \\_\n\n"), false);
     switch (get_highest_layer(layer_state)) {
         case QWERTY:
-            oled_write_P(PSTR("O.o\n"), false);
+            oled_write_P(PSTR(" O.o\n"), false);
             break;
         case NUMS:
-            oled_write_P(PSTR("6.6\n"), false);
+            oled_write_P(PSTR(" 6.6\n"), false);
             break;
         case PUNCTS:
-            oled_write_P(PSTR("@.#\n"), false);
+            oled_write_P(PSTR(" @.#\n"), false);
             break;
         case CURSOR:
             oled_write_P(PSTR("-> <-\n"), false);
             break;
         case MOUSE:
-            oled_write_P(PSTR("\n"), false);
+            oled_write_P(PSTR("`\\_()>\n"), false);
             break;
         case GAME:
-            oled_write_P(PSTR(":D  D:\n"), false);
+            oled_write_P(PSTR(":D D:\n"), false);
+            break;
+        case ADJUST:
+            oled_write_P(PSTR("  }{\n"), false);
             break;
         default:
-            oled_write_P(PSTR("}{\n"), false);
+            oled_write_P(PSTR("Hrm\n"), false);
     }
 
     // Host Keyboard LED Status
