@@ -17,28 +17,28 @@ enum layers {
 static void render_status(void) {
 
     // Host Keyboard Layer Status
-    oled_write_P(PSTR("\n  _\n_/ \\_\n\n"), false);
+    oled_write_P(PSTR("\n  __\n_/ \\_\n\n"), false);
     switch (get_highest_layer(layer_state)) {
         case QWERTY:
-            oled_write_P(PSTR(" O.o\n"), false);
+            oled_write_P(PSTR("  O.o\n"), false);
             break;
         case NUMS:
-            oled_write_P(PSTR(" 6.6\n"), false);
+            oled_write_P(PSTR("  9.6\n"), false);
             break;
         case PUNCTS:
-            oled_write_P(PSTR(" @.#\n"), false);
+            oled_write_P(PSTR("  @.#\n"), false);
             break;
         case CURSOR:
             oled_write_P(PSTR("-> <-\n"), false);
             break;
         case MOUSE:
-            oled_write_P(PSTR("`\\_()>\n"), false);
+            oled_write_P(PSTR("`-(:>\n"), false);
             break;
         case GAME:
             oled_write_P(PSTR(":D D:\n"), false);
             break;
         case ADJUST:
-            oled_write_P(PSTR("  }{\n"), false);
+            oled_write_P(PSTR("  } {\n"), false);
             break;
         default:
             oled_write_P(PSTR("Hrm\n"), false);
@@ -47,7 +47,7 @@ static void render_status(void) {
     // Host Keyboard LED Status
     uint8_t led_usb_state = host_keyboard_leds();
     oled_write_P(IS_LED_ON(led_usb_state, USB_LED_NUM_LOCK) ? PSTR("NUM ") : PSTR("\n"), false);
-    oled_write_P(IS_LED_ON(led_usb_state, USB_LED_CAPS_LOCK) ? PSTR("cApS ") : PSTR("    \n"), false);
+    oled_write_P(IS_LED_ON(led_usb_state, USB_LED_CAPS_LOCK) ? PSTR(" cAp$ ") : PSTR("    \n"), false);
     oled_write_P(IS_LED_ON(led_usb_state, USB_LED_SCROLL_LOCK) ? PSTR("SCRL ") : PSTR("\n"), false);
 }
 
