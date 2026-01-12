@@ -36,6 +36,7 @@ void gen_beyonkle(bool rCaps) {
   }
 }
 
+/* no beyonkle :'(
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case BEYONK:
@@ -50,7 +51,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     return true;
 }
-
+*/
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
     if (get_mods() & (MOD_BIT(KC_LGUI) | MOD_BIT(KC_LCTL) | MOD_BIT(KC_RCTL)) ) {
